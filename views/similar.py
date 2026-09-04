@@ -96,6 +96,8 @@ def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
         title="Nearest neighbours (one bar per car line)",
     )
     chart.update_traces(textposition="outside")
+    # most similar car at the top
+    chart.update_yaxes(categoryorder="total ascending")
     st.plotly_chart(plotly_style(chart), width="stretch")
 
     # comparison table: base car first, then neighbours

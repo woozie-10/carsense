@@ -120,10 +120,13 @@ def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
         title="Top model lines by weighted score",
     )
     fig.update_traces(textposition="outside")
+    # largest score at the top of the chart (plotly draws the first category
+    # at the bottom by default, so we pin the order explicitly)
+    fig.update_yaxes(categoryorder="total ascending")
     st.plotly_chart(plotly_style(fig), width="stretch")
     st.caption(
         "One bar per model line, using its best-scoring trim (the table below "
-        "lists all ranked trims). Colour follows the score: "
+        "lists all ranked trims). Sorted best first — colour follows the score: "
         "light blue = lower, dark navy = higher."
     )
 

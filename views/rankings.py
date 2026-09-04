@@ -69,10 +69,14 @@ def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
         title=f"Top {top_n} — {label} (one bar per car line)",
     )
     fig.update_traces(textposition="outside")
+    # best (rank 1) at the top: for "higher is better" metrics the largest bar
+    # goes on top, for "lower is better" metrics (seconds, l/100 km, kg) the
+    # smallest bar does
+    fig.update_yaxes(categoryorder="total descending" if ascending else "total ascending")
     st.plotly_chart(plotly_style(fig), width="stretch")
     st.caption(
         "One bar per model line, using its best row; the table below keeps "
-        "all ranked rows. Colour follows the metric: "
+        "all ranked rows. Sorted best first. Colour follows the metric: "
         "light = lower, dark = higher."
     )
 
