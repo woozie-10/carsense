@@ -66,7 +66,9 @@ def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
         color_continuous_scale="Oranges",
         text_auto=num_fmt,
         labels={col: label, "label": ""},
-        title=f"Top {top_n} — {label} (one bar per car line)",
+        # keep the title short so it never wraps into the plot on narrow
+        # windows; the "one bar per car line" detail lives in the caption below
+        title=f"Top {top_n} — {label}",
     )
     fig.update_traces(textposition="outside")
     # best (rank 1) at the top: for "higher is better" metrics the largest bar

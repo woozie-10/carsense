@@ -46,13 +46,24 @@ def metric_name(col: str) -> str:
 
 
 def plotly_style(fig: go.Figure, height: int = 380) -> go.Figure:
-    """Apply a consistent, clean theme to plotly figures."""
+    """Apply a consistent, clean theme to plotly figures.
+
+    Margins deliberately leave generous room at the top (chart title, and the
+    horizontal legend that sits just above the plot) and at the bottom (axis
+    name plus angled tick labels). Plotly keeps the plot area at a fixed
+    inset, so a title that wraps or a legend row that has no reserved space
+    would otherwise be drawn on top of the axis text at the edges of the plot.
+    """
     fig.update_layout(
         template="plotly_white",
         height=height,
-        margin=dict(l=40, r=20, t=40, b=40),
+        margin=dict(l=70, r=40, t=90, b=70),
         legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0),
     )
+    # grow margins further when a tick label or axis name is unusually long,
+    # so labels are never cut off or drawn over neighbouring text
+    fig.update_xaxes(automargin=True)
+    fig.update_yaxes(automargin=True)
     return fig
 
 
