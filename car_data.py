@@ -109,7 +109,11 @@ ML_FEATURES = [
 # ---------------------------------------------------------------------------
 
 def _fuel_type(engine_type: object) -> str:
-    """Map the messy ``engine_type`` strings to a small set of fuel classes."""
+    """Map the messy ``engine_type`` strings to a small set of fuel classes.
+
+    Order matters: ``"Gasoline"`` contains ``"gas"``, so the gasoline check
+    must run *before* the LPG check or every petrol car would be mislabeled.
+    """
     t = str(engine_type).lower()
     if "electric" in t and ("gasoline" in t or "diesel" in t or "hybrid" in t):
         return "Hybrid"
@@ -119,10 +123,10 @@ def _fuel_type(engine_type: object) -> str:
         return "Electric"
     if "diesel" in t:
         return "Diesel"
+    if "gasoline" in t or "petrol" in t or "rotor" in t:  # rotary = petrol engine
+        return "Petrol"
     if "gas" in t or "liquefied" in t:
         return "LPG/Gas"
-    if "gasoline" in t or "petrol" in t:
-        return "Petrol"
     return "Other"
 
 
@@ -227,7 +231,8 @@ def clean(raw: pd.DataFrame) -> pd.DataFrame:
     df["transmission_type"] = df["transmission"].map(_transmission_type)
     df["is_manual"] = df["transmission_type"].eq("Manual").astype(int)
     df["drive_type"] = df["drive_wheels"].map(_drive_type)
-    df["body_type"] = df["Body_type"].map(_body_type)
+    # some Body_type cells hold the literal string "nan" -> treat as missing
+    df["body_type"] = df["Body_type"].map(_body_type).replace("nan", np.nan)
 
     # --- derived numeric features -----------------------------------------
     df["year"] = df["Year_from"].astype(int)

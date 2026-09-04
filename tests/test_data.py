@@ -65,6 +65,23 @@ def test_pipeline():
     parsed = car_data._parse_range_km(pd.Series(["450|1,000", "600", np.nan]))
     assert parsed.iloc[0] == 725.0 and parsed.iloc[1] == 600.0
 
+    # fuel mapping sanity (order matters: "Gasoline" contains "gas")
+    assert car_data._fuel_type("Gasoline") == "Petrol"
+    assert car_data._fuel_type("petrol") == "Petrol"
+    assert car_data._fuel_type("Gasoline, Gas") == "Petrol"  # bi-fuel, primary = petrol
+    assert car_data._fuel_type("Rotor") == "Petrol"
+    assert car_data._fuel_type("Gas") == "LPG/Gas"
+    assert car_data._fuel_type("Liquefied coal hydrogen gases") == "LPG/Gas"
+    assert car_data._fuel_type("Diesel") == "Diesel"
+    assert car_data._fuel_type("Hybrid") == "Hybrid"
+    assert car_data._fuel_type("Electric") == "Electric"
+    assert car_data._fuel_type("Gasoline, Electric") == "Hybrid"
+    vc = df["fuel_type"].value_counts()
+    assert vc.get("Petrol", 0) > vc.get("Diesel", 0), "petrol must be the largest fuel class"
+    assert vc.get("LPG/Gas", 0) < 1_000, "genuine LPG rows only; gasoline must not leak in"
+
+    # no literal "nan" strings leaking into filter options
+    assert "nan" not in df["body_type"].dropna().astype(str).unique()
     print("OK — data pipeline checks passed")
 
 

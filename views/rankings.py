@@ -46,9 +46,14 @@ def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
     col, label, ascending, num_fmt = RANKINGS[rank_key]
     ranking = _ranking_table(df, col, ascending, top_n)
 
-    # one bar per ranked row (several trims of one car line can appear in a
-    # top-N list and share a label, so plotly stacks them into one long bar)
-    chart_df = ranking.head(top_n).copy()
+    # One bar per model line (best row per line; rows are already best-first).
+    # Multiple trims of one car can appear in a top-N list; identical bar
+    # labels would make plotly stack them into one multi-colour bar.
+    chart_df = (
+        ranking.drop_duplicates(subset=["model_label", "generation_label", "year_label"])
+        .head(top_n)
+        .copy()
+    )
     chart_df["label"] = (
         chart_df["model_label"] + " · " + chart_df["generation_label"] + " · " + chart_df["year_label"]
     )
@@ -59,12 +64,16 @@ def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
         orientation="h",
         color=col,
         color_continuous_scale="Oranges",
+        text_auto=num_fmt,
         labels={col: label, "label": ""},
-        title=f"Top {top_n} — {label}",
+        title=f"Top {top_n} — {label} (one bar per car line)",
     )
+    fig.update_traces(textposition="outside")
     st.plotly_chart(plotly_style(fig), width="stretch")
     st.caption(
-        "Each bar is a ranked row; colour follows the metric — light = lower, dark = higher."
+        "One bar per model line, using its best row; the table below keeps "
+        "all ranked rows. Colour follows the metric: "
+        "light = lower, dark = higher."
     )
 
     show_cols = ["rank"] + IDENTITY_COLUMNS + ["body_type", "fuel_type", "transmission_type", col]

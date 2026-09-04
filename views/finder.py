@@ -96,25 +96,34 @@ def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
 
     table.columns = [_label(c) for c in table.columns]
 
-    # one bar per ranked row (several trims of the same car line can appear in
-    # the top-N and share a label, so plotly stacks them into one long bar)
-    chart = results.head(10).copy()
-    chart["label"] = (
-        chart["model_label"] + " · " + chart["generation_label"] + " · " + chart["year_label"]
+    # One bar per model line (best-scoring trim). Several trims of the same car
+    # can land in the top-N; giving them all the same bar label would make
+    # plotly stack them into one multi-colour bar, so we deduplicate here.
+    lines = (
+        results.sort_values("score", ascending=False)
+        .drop_duplicates(subset=["model_label", "generation_label", "year_label"])
+        .head(10)
+        .copy()
+    )
+    lines["label"] = (
+        lines["model_label"] + " · " + lines["generation_label"] + " · " + lines["year_label"]
     )
     fig = px.bar(
-        chart,
+        lines,
         x="score",
         y="label",
         orientation="h",
         color="score",
         color_continuous_scale="Blues",
+        text_auto=".3f",
         labels={"score": "Score (0-1)", "label": ""},
-        title="Top matches by weighted score",
+        title="Top model lines by weighted score",
     )
+    fig.update_traces(textposition="outside")
     st.plotly_chart(plotly_style(fig), width="stretch")
     st.caption(
-        "Each bar is a ranked car; colour follows the weighted score — "
+        "One bar per model line, using its best-scoring trim (the table below "
+        "lists all ranked trims). Colour follows the score: "
         "light blue = lower, dark navy = higher."
     )
 

@@ -74,7 +74,13 @@ def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
     neighbours["similarity_pct"] = (1 / (1 + dists) * 100).round(1)
 
     # ---------------------------------------------------------------- display
-    chart_df = neighbours.copy()
+    # One bar per car line (most similar trim of each). Two trims of the same
+    # car can both be neighbours; deduplicating keeps the bars visually distinct.
+    chart_df = (
+        neighbours.sort_values("distance")
+        .drop_duplicates(subset=["model_label", "generation_label", "year_label"])
+        .copy()
+    )
     chart_df["label"] = (
         chart_df["model_label"] + " · " + chart_df["generation_label"] + " · " + chart_df["year_label"]
     )
@@ -85,9 +91,11 @@ def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
         orientation="h",
         color="similarity_pct",
         color_continuous_scale="Greens",
+        text_auto=".0f",
         labels={"similarity_pct": "Similarity %", "label": ""},
-        title="Nearest neighbours",
+        title="Nearest neighbours (one bar per car line)",
     )
+    chart.update_traces(textposition="outside")
     st.plotly_chart(plotly_style(chart), width="stretch")
 
     # comparison table: base car first, then neighbours
