@@ -26,7 +26,7 @@ def _agg(df: pd.DataFrame, by: list[str], col: str) -> pd.DataFrame:
 
 
 def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
-    st.header("🗂 Market Overview")
+    st.header("Market Overview")
     st.caption(
         "Aggregate analytics across all trims: how the market evolved, which "
         "brands dominate, and how drivetrains/transmissions shifted over time."

@@ -33,7 +33,7 @@ def _ranking_table(df: pd.DataFrame, col: str, ascending: bool, n: int) -> pd.Da
 
 
 def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
-    st.header("🏆 Rankings & Outliers")
+    st.header("Rankings & Outliers")
     st.caption("Top-N lists per metric and statistical outliers on any spec.")
 
     st.subheader("Top rankings")

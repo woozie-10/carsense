@@ -38,7 +38,7 @@ def _aggregate(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
-    st.header("📈 Evolution")
+    st.header("Evolution")
     st.caption(
         "Pick a model and watch its key specs change from generation to "
         "generation. Points are generation averages, placed on the mid-year "

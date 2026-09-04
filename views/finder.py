@@ -10,7 +10,7 @@ from views.common import IDENTITY_COLUMNS, SCORE_DIRECTIONS, empty_state, metric
 
 
 def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
-    st.header("🔍 Car Finder")
+    st.header("Car Finder")
     st.caption(
         "Set filters to narrow the market, then weight what matters to you. "
         "Cars are scored on the normalized specs you weight — higher score = better match."

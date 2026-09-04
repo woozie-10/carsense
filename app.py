@@ -20,11 +20,11 @@ st.set_page_config(
 )
 
 PAGES = {
-    "🔍 Finder": finder,
-    "🔁 Similar Models": similar,
-    "📈 Evolution": evolution,
-    "🏆 Rankings & Outliers": rankings,
-    "🗂 Market Overview": market,
+    "Finder": finder,
+    "Similar Models": similar,
+    "Evolution": evolution,
+    "Rankings & Outliers": rankings,
+    "Market Overview": market,
 }
 
 

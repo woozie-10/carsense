@@ -37,7 +37,7 @@ def _select_car(df: pd.DataFrame) -> pd.Series | None:
 
 
 def render(df: pd.DataFrame, ml: pd.DataFrame) -> None:
-    st.header("🔁 Similar Models")
+    st.header("Similar Models")
     st.caption(
         "Pick a car and find its 5 nearest neighbours by normalized specs "
         "(engine size, power, weight, dimensions) using scikit-learn's "
