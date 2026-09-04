@@ -38,7 +38,7 @@ Open the printed local URL (default `http://localhost:8501`).
 | | |
 |---|---|
 | Name | Car Specification Dataset 1945–2020 |
-| Source | [Kaggle — Car Specification Dataset 1945–2020](https://www.kaggle.com/datasets/griffft/car-specification-dataset-1945-2020) |
+| Source | [Kaggle — Car Specification Dataset 1945–2020](https://www.kaggle.com/datasets/jahaidulislam/car-specification-dataset-1945-2020) |
 | Size | 70,823 rows × 78 columns |
 | License | Public (Kaggle dataset terms) |
 
@@ -63,22 +63,22 @@ README.md
 
 ## The 5 pages
 
-1. **🔍 Finder** — filter by make, year range, body type, fuel, transmission and
+1. **Finder** — filter by make, year range, body type, fuel, transmission and
    drivetrain, then weight six criteria (power, fuel economy, size, weight,
    acceleration, trunk space) with 1–5 sliders. Numeric specs are normalized
    with `MinMaxScaler`, “lower is better” criteria are flipped, and every car
    gets a weighted score. Top-N table + chart, CSV export.
-2. **🔁 Similar Models** — pick any car (make → model → generation → trim) and
+2. **Similar Models** — pick any car (make → model → generation → trim) and
    find its 5 nearest neighbours with `sklearn.neighbors.NearestNeighbors` on
    normalized engine size, power, weight and dimensions. Comparison table +
    similarity chart.
-3. **📈 Evolution** — pick a make + model and see how average power, engine
+3. **Evolution** — pick a make + model and see how average power, engine
    size, weight, torque, fuel consumption and acceleration changed from
    generation to generation, plus the transmission mix and manual-share trend.
-4. **🏆 Rankings & Outliers** — top-N lists (most powerful, hp per litre,
+4. **Rankings & Outliers** — top-N lists (most powerful, hp per litre,
    power-to-weight, fastest, most economical, highest torque, lightest) and
    z-score outlier detection on any numeric spec with an adjustable threshold.
-5. **🗂 Market Overview** — aggregate analytics: metric by decade, manual vs
+5. **Market Overview** — aggregate analytics: metric by decade, manual vs
    automatic share by year, top makes by metric, body-type breakdown, drivetrain
    and fuel-type mix over decades, plus a market snapshot.
 
@@ -134,8 +134,7 @@ still useful because every Finder/Similarity result explains what it uses.
 
 ## Notes & limitations
 
-- **No price column** exists in the dataset, so there is no budget filter — the
-  Finder page notes this and suggests proxy filters instead.
+- **No price column** exists in the dataset, so there is no budget filter.
 - Performance figures are as published by the source and may vary by trim/year.
 - Python 3.11+ required (tested on 3.14); Streamlit Community Cloud supports
   3.9–3.13 — `requirements.txt` has no upper pins, so any of those work.
